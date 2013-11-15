@@ -77,7 +77,10 @@ public class Maze {
      * @see Maze#maze
      * @see Position
      */
-    public Maze(Position mousePos, Position cheesePos) {
+    public Maze(Position mousePos, Position cheesePos) throws Exception {
+        if (! (isValidPosition(mousePos) && isValidPosition(cheesePos)) ) {
+            throw new Exception("Invalid mouse or cheese position");
+        }
         mouse = new Mouse(mousePos, this);
         cheese = new Cheese(cheesePos);
         maze[mousePos.getX()][mousePos.getY()] = MOUSECODE;
