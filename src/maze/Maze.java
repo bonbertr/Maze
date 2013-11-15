@@ -28,12 +28,6 @@ public class Maze {
     private static final int CHEESECODE = 3;
     
     /**
-     * The maze's matrix dimension.
-     * @see Maze#getMazeDim() 
-     */
-    private int mazeDim[] = {10,10}; 
-    
-    /**
      * The maze is represented by a 2D integer matrix.
      * @see Maze#getMaze() 
      * @see Maze#Maze(maze.Position, maze.Position) 
@@ -100,7 +94,10 @@ public class Maze {
      * @return an array of two integers representing the maze's dimension
      */
     public int[] getMazeDim() {
-        return mazeDim;
+        int dim[] = new int[2];
+        dim[0] = maze[0].length;
+        dim[1] = maze.length;
+        return dim;
     }
     
     /**
@@ -177,7 +174,7 @@ public class Maze {
      */
     public boolean isValidPosition(Position pos) {
         if (pos.getX() < 0 || pos.getY() < 0
-                || pos.getX() >= mazeDim[0] || pos.getY() >= mazeDim[1]) {
+                || pos.getX() >= getMazeDim()[0] || pos.getY() >= getMazeDim()[1]) {
             return false;
         } else {
             if (maze[pos.getX()][pos.getY()] == WALLCODE) {
