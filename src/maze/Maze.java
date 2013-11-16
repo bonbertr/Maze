@@ -76,17 +76,17 @@ public class Maze {
     }
     
     /**
-     * 
-     * @param name 
+     * Build a maze from a file.
+     * @param name the maze file to read
      */
      private static int[][] readMazeFile(String name) {
         int newMaze[][] = null;
-        String path = new File(".").getAbsolutePath();
+        String path = new File(".").getAbsolutePath(); // Find the path
         try (BufferedReader br = new BufferedReader(new FileReader(path + "\\ressources\\" + name))) {
             String sCurrentLine;
             int j = 0;
             while ((sCurrentLine = br.readLine()) != null) {
-                    if (j == 0) {
+                    if (j == 0) { // Read the first line to get the dimension of the maze
                         String[] s = sCurrentLine.split(",");
                         newMaze = new int[Integer.decode(s[0])][Integer.decode(s[1])];
                     } else {
