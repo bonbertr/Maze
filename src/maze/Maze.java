@@ -1,5 +1,9 @@
 package maze;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class represents a maze.
@@ -32,18 +36,7 @@ public class Maze {
      * @see Maze#getMaze() 
      * @see Maze#Maze(maze.Position, maze.Position) 
      */
-    private int maze[][] =  {
-        {0,0,0,0,0,1,0,0,0,1},
-        {0,1,0,1,0,1,0,1,0,0},
-        {0,1,0,1,0,0,0,1,0,1},
-        {1,0,0,0,1,1,1,0,0,0},
-        {0,0,1,0,0,0,0,1,1,0},
-        {1,1,0,0,1,0,1,0,0,1},
-        {0,0,0,1,0,0,1,1,0,1},
-        {0,1,0,0,1,1,0,0,0,0},
-        {0,0,1,1,0,0,0,1,0,1},
-        {1,0,0,0,0,1,1,0,0,0},
-    };
+    private int maze[][];
     
     /**
      * The mouse.
@@ -71,7 +64,8 @@ public class Maze {
      * @see Maze#maze
      * @see Position
      */
-    public Maze(Position mousePos, Position cheesePos) throws Exception {
+    public Maze(String name, Position mousePos, Position cheesePos) throws Exception {
+        maze = Maze.readMazeFile(name);
         if (! (isValidPosition(mousePos) && isValidPosition(cheesePos)) ) {
             throw new Exception("Invalid mouse or cheese position");
         }
@@ -79,6 +73,32 @@ public class Maze {
         cheese = new Cheese(cheesePos);
         maze[mousePos.getX()][mousePos.getY()] = MOUSECODE;
         maze[cheesePos.getX()][cheesePos.getY()] = CHEESECODE;
+    }
+    
+    /**
+     * 
+     * @param name 
+     */
+     private static int[][] readMazeFile(String name) {
+        int newMaze[][] = null;
+        String path = new File(".").getAbsolutePath();
+        try (BufferedReader br = new BufferedReader(new FileReader(path + "\\ressources\\" + name))) {
+            String sCurrentLine;
+            int j = 0;
+            while ((sCurrentLine = br.readLine()) != null) {
+                    if (j == 0) {
+                        String[] s = sCurrentLine.split(",");
+                        newMaze = new int[Integer.decode(s[0])][Integer.decode(s[1])];
+                    } else {
+                        for (int i = 0; i < sCurrentLine.length(); i++)
+                            newMaze[j-1][i] = Integer.decode(String.valueOf(sCurrentLine.charAt(i)));
+                    }
+                    j++;
+            }
+        } catch (IOException e) {
+                System.out.println(e.getMessage());
+        }
+        return newMaze;
     }
     
     /**
@@ -172,7 +192,7 @@ public class Maze {
      * @return a boolean which represents the position validity
      * @see Position
      */
-    public boolean isValidPosition(Position pos) {
+    public final boolean isValidPosition(Position pos) {
         if (pos.getX() < 0 || pos.getY() < 0
                 || pos.getX() >= getMazeDim()[0] || pos.getY() >= getMazeDim()[1]) {
             return false;
